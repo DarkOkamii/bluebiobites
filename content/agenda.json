@@ -1,0 +1,88 @@
+{
+  "eventos": [
+    {
+      "day": "18",
+      "month": "sep",
+      "year": "2026",
+      "type": "Charla",
+      "title": "Microbiota y acuicultura: del laboratorio al pienso",
+      "place": "Aula Magna, Facultad de Ciencias",
+      "org": "Universidad de Alicante",
+      "time": "18:00",
+      "url": "#",
+      "upcoming": true
+    },
+    {
+      "day": "02",
+      "month": "oct",
+      "year": "2026",
+      "type": "Congreso",
+      "title": "III Jornadas de Biotecnología Azul",
+      "place": "Edificio Altet",
+      "org": "Universidad Miguel Hernández, Elche",
+      "time": "09:30",
+      "url": "#",
+      "upcoming": true
+    },
+    {
+      "day": "21",
+      "month": "oct",
+      "year": "2026",
+      "type": "Taller",
+      "title": "Identificación molecular de Vibrio spp. en muestras costeras",
+      "place": "Centro Oceanográfico de Murcia",
+      "org": "IEO-CSIC",
+      "time": "16:00",
+      "url": "#",
+      "upcoming": true
+    },
+    {
+      "day": "14",
+      "month": "nov",
+      "year": "2026",
+      "type": "Charla",
+      "title": "Microplásticos: del muestreo al espectro Raman",
+      "place": "Sede Ciudad de Alicante",
+      "org": "Universidad de Alicante",
+      "time": "19:00",
+      "url": "#",
+      "upcoming": true
+    },
+    {
+      "day": "27",
+      "month": "mar",
+      "year": "2026",
+      "type": "Congreso",
+      "title": "Encuentro de Jóvenes Investigadores del Mar",
+      "place": "Facultad de Ciencias del Mar",
+      "org": "Universidad de Alicante",
+      "time": "",
+      "url": "#",
+      "upcoming": false
+    },
+    {
+      "day": "12",
+      "month": "feb",
+      "year": "2026",
+      "type": "Taller",
+      "title": "Introducción al análisis de amplicones 16S",
+      "place": "Parque Científico de Alicante",
+      "org": "PCA",
+      "time": "",
+      "url": "#",
+      "upcoming": false
+    },
+    {
+      "day": "05",
+      "month": "dic",
+      "year": "2025",
+      "type": "Charla",
+      "title": "Poliquetos, residuos y economía circular en acuicultura",
+      "place": "Campus de Santiago Bernabéu",
+      "org": "UPCT, Cartagena",
+      "time": "",
+      "url": "#",
+      "upcoming": false
+    }
+  ]
+}
