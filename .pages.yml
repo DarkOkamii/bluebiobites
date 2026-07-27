@@ -1,0 +1,113 @@
+media:
+  input: assets
+  output: /assets
+
+content:
+  - name: articulos
+    label: "Artículos"
+    type: file
+    path: content/articulos.json
+    fields:
+      - name: articulos
+        label: "Lista de artículos"
+        type: object
+        list: true
+        fields:
+          - name: slug
+            label: "Slug (identificador único, sin espacios ni tildes, ej. 'mi-articulo')"
+            type: string
+          - name: cat
+            label: "Categoría"
+            type: select
+            options:
+              values:
+                - { name: bio, label: "Biología marina" }
+                - { name: eco, label: "Ecología marina y conservación" }
+                - { name: micro, label: "Microbiología marina" }
+                - { name: biot, label: "Biotecnología marina" }
+                - { name: quim, label: "Química y bioquímica marina" }
+                - { name: gen, label: "Genética y genómica marina" }
+                - { name: ocea, label: "Oceanografía y geología marina" }
+                - { name: acui, label: "Acuicultura y ciencias pesqueras" }
+          - name: type
+            label: "Tipo"
+            type: select
+            options:
+              values:
+                - { name: noticia, label: "Noticia" }
+                - { name: tecnica, label: "Técnica" }
+          - name: date
+            label: "Fecha (texto, ej. '14 julio 2026')"
+            type: string
+          - name: read
+            label: "Tiempo de lectura (ej. '7 min')"
+            type: string
+          - name: title
+            label: "Título"
+            type: string
+          - name: excerpt
+            label: "Resumen corto"
+            type: text
+          - name: bites
+            label: "Bites (frases clave)"
+            type: string
+            list: true
+          - name: body
+            label: "Cuerpo del artículo (un bloque por párrafo)"
+            type: rich-text
+            list: true
+          - name: ref
+            label: "Referencias (APA 7, una por entrada)"
+            type: text
+            list: true
+
+  - name: sobre-mi
+    label: "Sobre mí"
+    type: file
+    path: content/sobre-mi.json
+    fields:
+      - name: parrafos
+        label: "Párrafos"
+        type: rich-text
+        list: true
+
+  - name: agenda
+    label: "Agenda"
+    type: file
+    path: content/agenda.json
+    fields:
+      - name: eventos
+        label: "Eventos"
+        type: object
+        list: true
+        fields:
+          - name: day
+            label: "Día (2 cifras, ej. '18')"
+            type: string
+          - name: month
+            label: "Mes (3 letras en minúscula, ej. 'sep')"
+            type: string
+          - name: year
+            label: "Año"
+            type: string
+          - name: type
+            label: "Tipo (Charla / Congreso / Taller)"
+            type: string
+          - name: title
+            label: "Título"
+            type: string
+          - name: place
+            label: "Lugar"
+            type: string
+          - name: org
+            label: "Organiza"
+            type: string
+          - name: time
+            label: "Hora (ej. '18:00', vacío si no aplica)"
+            type: string
+          - name: url
+            label: "Enlace"
+            type: string
+          - name: upcoming
+            label: "¿Es un evento próximo?"
+            type: boolean
