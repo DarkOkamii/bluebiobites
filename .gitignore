@@ -1,0 +1,12 @@
+# Archivos de diseño (Claude Design) — no los usa la web real,
+# el origen del diseño sigue disponible en claude.ai/design.
+BlueBioBites.dc.html
+BlueBioBites - Inicio (opciones).dc.html
+support.js
+.thumbnail
+
+# Copias sueltas de imágenes subidas al editor de diseño (duplicadas de assets/)
+uploads/
+
+# Configuración local de Claude Code
+.claude/

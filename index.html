@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlueBioBites — El mar, explicado a bocados</title>
+<meta name="description" content="Ciencias marinas contadas con el rigor del laboratorio y sin la jerga que sobra, por Alejandro Galán.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0B3D57;--navy-deep:#08293f;--teal:#17A398;--coral:#F2665E;--cream:#F7F1E3;--ink:#12293A;}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:#fff;font-family:'DM Sans',system-ui,sans-serif;color:var(--ink)}
+  a{color:var(--teal);text-decoration:none}
+  a:hover{color:var(--coral)}
+  input,button,textarea{font-family:inherit}
+  button{border:none;background:none;padding:0;margin:0;font-size:inherit;color:inherit;text-align:left}
+  [role="button"]{user-select:none}
+  [role="button"]:focus-visible,a:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+  .bbb-burger{display:none}
+  /* Base (desktop) values for properties the media query below overrides.
+     These must live in CSS, not inline styles, or the inline style (higher
+     specificity) would always win and the site would never become responsive. */
+  .bbb-nav{display:flex}
+  .bbb-arts{grid-template-columns:262px 1fr}
+  .bbb-side{position:sticky}
+  .bbb-hero{grid-template-columns:1.1fr .9fr}
+  .bbb-feat{grid-template-columns:1.55fr 1fr}
+  .bbb-3col-footer{grid-template-columns:1.3fr 1fr 1fr}
+  .bbb-3col-related{grid-template-columns:repeat(3,1fr)}
+  .bbb-row-center{align-items:center}
+  .bbb-list{grid-template-columns:1fr 1fr}
+  .bbb-pad{padding-left:40px;padding-right:40px}
+  .bbb-h1{font-size:72px}
+  @media(max-width:900px){
+    .bbb-nav{display:none}
+    .bbb-burger{display:grid}
+    .bbb-arts{grid-template-columns:1fr}
+    .bbb-side{position:static}
+    .bbb-hero{grid-template-columns:1fr}
+    .bbb-feat{grid-template-columns:1fr}
+    .bbb-3col{grid-template-columns:1fr}
+    .bbb-row{flex-direction:column;align-items:stretch}
+    .bbb-list{grid-template-columns:1fr}
+    .bbb-pad{padding-left:22px;padding-right:22px}
+    .bbb-h1{font-size:44px}
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<iframe name="bbb-subscribe-frame" id="bbb-subscribe-frame" title="" aria-hidden="true" tabindex="-1" style="position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none"></iframe>
+<script src="app.js"></script>
+</body>
+</html>
