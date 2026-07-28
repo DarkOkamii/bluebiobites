@@ -2,6 +2,21 @@
 (() => {
 
   /* ---------------------------------------------------------------- */
+  /* Root path                                                         */
+  /* ---------------------------------------------------------------- */
+  // app.js is loaded both from the site root (index.html) and from nested
+  // pre-rendered article pages (articulo/<slug>/index.html), so any
+  // relative reference this file builds (assets, content/*.json) must be
+  // resolved against app.js's OWN location, not the current page's depth.
+  const ROOT_PREFIX = (function () {
+    try {
+      const cur = document.currentScript && document.currentScript.src;
+      if (cur) return new URL('.', cur).pathname.replace(/\/$/, '');
+    } catch (e) { /* ignore */ }
+    return '';
+  })();
+
+  /* ---------------------------------------------------------------- */
   /* Supabase (comentarios)                                            */
   /* ---------------------------------------------------------------- */
   // Sustituye estos dos valores por los de tu propio proyecto de Supabase
@@ -172,8 +187,26 @@
     const target = state.page === 'inicio' ? '#/'
       : state.page === 'articulo' ? '#/articulo/' + encodeURIComponent(state.slug)
       : '#/' + state.page;
-    suppressHashHandling = true;
-    location.hash = target;
+    // Direct links to a pre-rendered article page (articulo/<slug>/index.html)
+    // land on a real, nested pathname. Once the visitor navigates anywhere
+    // else inside the SPA, reset the pathname back to the site root so hash
+    // URLs stay clean instead of accumulating a stale nested path.
+    const rootPath = ROOT_PREFIX + '/';
+    if (location.pathname !== rootPath && location.pathname !== ROOT_PREFIX) {
+      history.replaceState(null, '', rootPath + target);
+    } else {
+      suppressHashHandling = true;
+      location.hash = target;
+    }
+  }
+
+  // Slug encoded in a pre-rendered article URL (articulo/<slug>/), used as a
+  // fallback initial route when the page is opened directly (no hash yet).
+  function parsePathnameArticleSlug() {
+    let path = location.pathname;
+    if (ROOT_PREFIX && path.indexOf(ROOT_PREFIX) === 0) path = path.slice(ROOT_PREFIX.length);
+    const m = path.match(/\/articulo\/([^/]+)\/?(?:index\.html)?$/);
+    return m ? decodeURIComponent(m[1]) : null;
   }
 
   function go(page, extra) {
@@ -225,7 +258,7 @@
     return `
 <header style="position:sticky;top:0;z-index:20;background:#0B3D57;color:#fff">
   <div class="bbb-pad" style="max-width:1180px;margin:0 auto;padding-top:14px;padding-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:24px">
-    <div data-action="nav" data-page="inicio" role="button" tabindex="0" style="display:flex;align-items:center;gap:12px;cursor:pointer"><img src="assets/logo.png" alt="BlueBioBites" width="619" height="695" style="width:40px;height:auto;display:block;filter:brightness(0) invert(1)"><span style="font-size:19px;letter-spacing:-.01em">bluebiobites</span></div>
+    <div data-action="nav" data-page="inicio" role="button" tabindex="0" style="display:flex;align-items:center;gap:12px;cursor:pointer"><img src="${ROOT_PREFIX}/assets/logo.png" alt="BlueBioBites" width="619" height="695" style="width:40px;height:auto;display:block;filter:brightness(0) invert(1)"><span style="font-size:19px;letter-spacing:-.01em">bluebiobites</span></div>
     <nav class="bbb-nav" style="gap:30px;font-size:15px">
       ${NAV_ITEMS.map(([id, label]) => navItem(id, label, false)).join('')}
     </nav>
@@ -266,7 +299,7 @@
       </div>`}
     </div>
     <div class="bbb-3col bbb-3col-footer" style="display:grid;gap:40px">
-      <div><img src="assets/logo.png" alt="" width="619" height="695" loading="lazy" style="width:64px;height:auto;display:block;filter:brightness(0) invert(1);opacity:.9"><p style="margin:14px 0 0;font-size:15px;opacity:.75"><i>El mar, explicado a bocados.</i></p></div>
+      <div><img src="${ROOT_PREFIX}/assets/logo.png" alt="" width="619" height="695" loading="lazy" style="width:64px;height:auto;display:block;filter:brightness(0) invert(1);opacity:.9"><p style="margin:14px 0 0;font-size:15px;opacity:.75"><i>El mar, explicado a bocados.</i></p></div>
       <div style="display:flex;flex-direction:column;gap:9px;font-size:14.5px">
         ${NAV_ITEMS.map(([id, label]) => `<span data-action="nav" data-page="${id}" role="button" tabindex="0" style="cursor:pointer;opacity:.8">${esc(label)}</span>`).join('')}
       </div>
@@ -383,7 +416,7 @@
       </div>
       <div style="justify-self:center;position:relative;width:400px;max-width:100%;aspect-ratio:1;display:grid;place-items:center">
         <div style="position:absolute;inset:0;border-radius:50%;background-color:#FFFFFFEB;width:403px;height:406px"></div>
-        <img src="assets/logo.png" alt="BlueBioBites" width="619" height="695" style="position:relative;width:78%;height:auto;display:block">
+        <img src="${ROOT_PREFIX}/assets/logo.png" alt="BlueBioBites" width="619" height="695" style="position:relative;width:78%;height:auto;display:block">
       </div>
     </div>
   </div>
@@ -445,7 +478,7 @@
     return `
 <main class="bbb-pad" style="max-width:1180px;margin:0 auto;padding-top:64px;padding-bottom:80px">
   <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
-    <div style="width:190px;height:190px;border-radius:50%;overflow:hidden;border:3px solid #17A398"><img src="assets/foto.png" alt="Alejandro Galán" width="400" height="400" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+    <div style="width:190px;height:190px;border-radius:50%;overflow:hidden;border:3px solid #17A398"><img src="${ROOT_PREFIX}/assets/foto.png" alt="Alejandro Galán" width="400" height="400" style="width:100%;height:100%;object-fit:cover;display:block"></div>
     <h1 style="margin:26px 0 0;font-size:44px;font-weight:500;letter-spacing:-.03em;color:#0B3D57">Alejandro Galán Galián</h1>
     <p style="margin:10px 0 0;font-size:17px;color:#12293A;opacity:.7">Ciencias del Mar · Biotecnología para la Salud y la Sostenibilidad</p>
     <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center">
@@ -547,7 +580,7 @@
     </div>
     <h1 style="margin:20px 0 0;font-size:46px;line-height:1.08;letter-spacing:-.03em;font-weight:500;color:#0B3D57;text-wrap:balance">${esc(art.title)}</h1>
     <div style="margin-top:16px;display:flex;align-items:center;gap:11px">
-      <span style="width:34px;height:34px;border-radius:50%;overflow:hidden;display:block"><img src="assets/foto.png" alt="" width="400" height="400" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+      <span style="width:34px;height:34px;border-radius:50%;overflow:hidden;display:block"><img src="${ROOT_PREFIX}/assets/foto.png" alt="" width="400" height="400" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></span>
       <span style="font-size:14.5px;color:#12293A;opacity:.75">Por Alejandro Galán</span>
     </div>
     <div style="margin-top:30px;height:340px;border-radius:14px;background:repeating-linear-gradient(135deg,${art.tintA} 0 14px,${art.tintB} 14px 28px);display:grid;place-items:center"><span style="font:11px ui-monospace,Menlo,monospace;color:${art.accent}">imagen destacada</span></div>
@@ -786,9 +819,9 @@
 
   async function loadContent() {
     const [articulosRes, bioRes, agendaRes] = await Promise.all([
-      fetch('content/articulos.json'),
-      fetch('content/sobre-mi.json'),
-      fetch('content/agenda.json')
+      fetch(ROOT_PREFIX + '/content/articulos.json'),
+      fetch(ROOT_PREFIX + '/content/sobre-mi.json'),
+      fetch(ROOT_PREFIX + '/content/agenda.json')
     ]);
     const [articulosData, bioData, agendaData] = await Promise.all([
       articulosRes.json(), bioRes.json(), agendaRes.json()
@@ -810,7 +843,12 @@
     const frame = document.getElementById('bbb-subscribe-frame');
     if (frame) frame.addEventListener('load', onNewsletterFrameLoad);
 
-    root.innerHTML = '<div style="padding:100px 20px;text-align:center;color:#0B3D57;font-family:sans-serif">Cargando…</div>';
+    // Pre-rendered pages (e.g. articulo/<slug>/index.html) already have real
+    // static content in #app for SEO/no-JS visitors — don't flash a loading
+    // placeholder over it while we fetch the same data to hydrate in place.
+    if (!root.innerHTML.trim()) {
+      root.innerHTML = '<div style="padding:100px 20px;text-align:center;color:#0B3D57;font-family:sans-serif">Cargando…</div>';
+    }
 
     try {
       await loadContent();
@@ -826,7 +864,15 @@
       // No bloqueamos el resto de la web si los comentarios fallan
     }
 
-    const initial = parseHash();
+    let initial = parseHash();
+    // No hash yet: this may be a direct visit to a pre-rendered article URL
+    // (articulo/<slug>/) coming from search results or a shared link.
+    if (initial.page === 'inicio' && !location.hash) {
+      const slug = parsePathnameArticleSlug();
+      if (slug && ARTICLES.some(a => a.slug === slug)) {
+        initial = {page: 'articulo', slug};
+      }
+    }
     Object.assign(state, initial);
     render();
   }

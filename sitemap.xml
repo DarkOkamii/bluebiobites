@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://darkokamii.github.io/bluebiobites/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/vibrio-tcbs/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/pacbio-16s/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/hediste-pienso/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/bomba-carbono/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/quitosano-hongos/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/microplasticos-seychelles/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/ficobiliproteinas/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/articulo/tiburon-peregrino/</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/#/sobre</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/#/articulos</loc></url>
+  <url><loc>https://darkokamii.github.io/bluebiobites/#/agenda</loc></url>
 </urlset>
