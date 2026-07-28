@@ -64,6 +64,7 @@
   .bbb-skip-link{position:absolute;left:8px;top:-100px;background:#0B3D57;color:#fff;padding:12px 20px;border-radius:6px;z-index:100;transition:top .15s}
   .bbb-skip-link:focus{top:8px}
   .bbb-burger{display:none}
+  .bbb-search-mobile-row{display:none}
   /* Base (desktop) values for properties the media query below overrides.
      These must live in CSS, not inline styles, or the inline style (higher
      specificity) would always win and the site would never become responsive. */
@@ -90,6 +91,8 @@
     .bbb-list{grid-template-columns:1fr}
     .bbb-pad{padding-left:22px;padding-right:22px}
     .bbb-h1{font-size:44px}
+    .bbb-search-input{display:none}
+    .bbb-search-mobile-row{display:flex}
   }
 </style>
 </head>

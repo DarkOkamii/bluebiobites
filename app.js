@@ -230,11 +230,15 @@
       ${NAV_ITEMS.map(([id, label]) => navItem(id, label, false)).join('')}
     </nav>
     <div style="display:flex;align-items:center;gap:10px">
-      ${state.searchOpen ? `<input data-bind="query" aria-label="Buscar artículos" value="${esc(state.query)}" placeholder="Buscar artículos…" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;outline:none;width:210px">` : ''}
+      ${state.searchOpen ? `<input class="bbb-search-input" data-bind="query" aria-label="Buscar artículos" value="${esc(state.query)}" placeholder="Buscar artículos…" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;outline:none;width:210px">` : ''}
       <div data-action="toggle-search" role="button" tabindex="0" aria-label="${state.searchOpen ? 'Cerrar buscador' : 'Buscar'}" aria-expanded="${state.searchOpen}" style="cursor:pointer;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;font-size:15px">⌕</div>
       <div class="bbb-burger" data-action="toggle-menu" role="button" tabindex="0" aria-label="${state.menuOpen ? 'Cerrar menú' : 'Abrir menú'}" aria-expanded="${state.menuOpen}" style="cursor:pointer;flex:none;width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.3);place-items:center;font-size:15px">☰</div>
     </div>
   </div>
+  ${state.searchOpen ? `
+  <div class="bbb-search-mobile-row" style="border-top:1px solid rgba(255,255,255,.15);padding:12px 22px;gap:10px">
+    <input class="bbb-search-input-mobile" data-bind="query" aria-label="Buscar artículos" value="${esc(state.query)}" placeholder="Buscar artículos…" style="flex:1;min-width:0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;outline:none">
+  </div>` : ''}
   ${state.menuOpen ? `
   <div style="border-top:1px solid rgba(255,255,255,.15);padding:10px 22px 16px;display:flex;flex-direction:column;gap:2px">
     ${NAV_ITEMS.map(([id, label]) => navItem(id, label, true)).join('')}
@@ -657,7 +661,11 @@
     }
     render();
     if (bind) {
-      const el = document.querySelector('[data-bind="' + bind + '"]');
+      // Some binds (e.g. the header search box) render twice — once for
+      // desktop, once for the mobile full-width row — with only one shown
+      // per breakpoint via CSS. Prefer whichever copy is actually visible.
+      const candidates = Array.from(document.querySelectorAll('[data-bind="' + bind + '"]'));
+      const el = candidates.find(c => c.offsetParent !== null) || candidates[0];
       if (el) {
         el.focus();
         if (selStart != null && el.setSelectionRange) {
