@@ -198,7 +198,7 @@ $refHtml
     <a href="../../#/sobre" style="color:#fff;opacity:.8">Sobre mí</a>
     <a href="../../#/articulos" style="color:#fff;opacity:.8">Artículos</a>
     <a href="../../#/agenda" style="color:#fff;opacity:.8">Agenda</a>
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15);font-size:13px;opacity:.6">&copy; 2026 BlueBioBites</div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15);font-size:13px;opacity:.6">&copy; 2026 BlueBioBites &middot; <a href="../../privacidad.html" style="color:#fff;opacity:.85">Política de privacidad</a></div>
   </div>
 </footer>
 </div>
