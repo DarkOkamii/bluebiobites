@@ -435,7 +435,7 @@
     </div>
   </div>
   <div style="max-width:66ch;margin:48px auto 0;display:flex;flex-direction:column;gap:22px">
-    ${BIO.map(t => `<p style="margin:0;font-size:17.5px;line-height:1.75;color:#12293A;opacity:.88;text-wrap:pretty">${esc(t)}</p>`).join('')}
+    ${BIO.map(t => `<p style="margin:0;font-size:17.5px;line-height:1.75;color:#12293A;opacity:.88;text-align:justify;text-wrap:pretty">${esc(t)}</p>`).join('')}
     <a href="mailto:hola@bluebiobites.com" style="align-self:flex-start;margin-top:14px;background:#F2665E;color:#fff;padding:14px 30px;border-radius:6px;font-size:15px;text-decoration:none">Escríbeme</a>
   </div>
 </main>`;
