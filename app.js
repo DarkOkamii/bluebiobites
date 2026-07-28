@@ -193,6 +193,21 @@
     }
   }
 
+  function pageDescription() {
+    switch (state.page) {
+      case 'sobre': return 'Sobre Alejandro Galán: Ciencias del Mar y Máster en Biotecnología para la Salud y la Sostenibilidad (UA).';
+      case 'articulos': return 'Artículos de biología, ecología, microbiología, biotecnología, química, genética, oceanografía y acuicultura marina.';
+      case 'articulo': return currentArticle().excerpt;
+      case 'agenda': return 'Charlas, congresos y talleres sobre ciencia marina en Alicante, Elche, Murcia y alrededores.';
+      default: return 'Ciencias marinas contadas con el rigor del laboratorio y sin la jerga que sobra, por Alejandro Galán.';
+    }
+  }
+
+  function setMeta(name, content) {
+    let el = document.querySelector('meta[name="' + name + '"], meta[property="' + name + '"]');
+    if (el) el.setAttribute('content', content);
+  }
+
   /* ---------------------------------------------------------------- */
   /* Render: header / footer                                          */
   /* ---------------------------------------------------------------- */
@@ -210,14 +225,14 @@
     return `
 <header style="position:sticky;top:0;z-index:20;background:#0B3D57;color:#fff">
   <div class="bbb-pad" style="max-width:1180px;margin:0 auto;padding-top:14px;padding-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:24px">
-    <div data-action="nav" data-page="inicio" role="button" tabindex="0" style="display:flex;align-items:center;gap:12px;cursor:pointer"><img src="assets/logo.png" alt="BlueBioBites" style="width:40px;display:block;filter:brightness(0) invert(1)"><span style="font-size:19px;letter-spacing:-.01em">bluebiobites</span></div>
+    <div data-action="nav" data-page="inicio" role="button" tabindex="0" style="display:flex;align-items:center;gap:12px;cursor:pointer"><img src="assets/logo.png" alt="BlueBioBites" width="619" height="695" style="width:40px;height:auto;display:block;filter:brightness(0) invert(1)"><span style="font-size:19px;letter-spacing:-.01em">bluebiobites</span></div>
     <nav class="bbb-nav" style="gap:30px;font-size:15px">
       ${NAV_ITEMS.map(([id, label]) => navItem(id, label, false)).join('')}
     </nav>
     <div style="display:flex;align-items:center;gap:10px">
-      ${state.searchOpen ? `<input data-bind="query" value="${esc(state.query)}" placeholder="Buscar artículos…" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;outline:none;width:210px">` : ''}
-      <div data-action="toggle-search" role="button" tabindex="0" style="cursor:pointer;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;font-size:15px">⌕</div>
-      <div class="bbb-burger" data-action="toggle-menu" role="button" tabindex="0" style="cursor:pointer;flex:none;width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.3);place-items:center;font-size:15px">☰</div>
+      ${state.searchOpen ? `<input data-bind="query" aria-label="Buscar artículos" value="${esc(state.query)}" placeholder="Buscar artículos…" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;outline:none;width:210px">` : ''}
+      <div data-action="toggle-search" role="button" tabindex="0" aria-label="${state.searchOpen ? 'Cerrar buscador' : 'Buscar'}" aria-expanded="${state.searchOpen}" style="cursor:pointer;flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;font-size:15px">⌕</div>
+      <div class="bbb-burger" data-action="toggle-menu" role="button" tabindex="0" aria-label="${state.menuOpen ? 'Cerrar menú' : 'Abrir menú'}" aria-expanded="${state.menuOpen}" style="cursor:pointer;flex:none;width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.3);place-items:center;font-size:15px">☰</div>
     </div>
   </div>
   ${state.menuOpen ? `
@@ -240,14 +255,14 @@
       <div style="flex:none;display:flex;align-items:center;gap:10px;font-size:15px;color:#17A398">✓ <span style="color:#fff;opacity:.85">Apuntado. Gracias.</span></div>` : `
       <div style="flex:none;display:flex;flex-direction:column;gap:6px">
         <form class="bbb-row" data-newsletter-form action="https://buttondown.com/api/emails/embed-subscribe/bluebiobites" method="post" target="bbb-subscribe-frame" style="display:flex;gap:10px">
-          <input type="email" name="email" required data-bind="email" value="${esc(state.email)}" placeholder="tu@correo.com" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:8px;padding:13px 16px;font-size:14.5px;outline:none;width:250px">
+          <input type="email" name="email" required data-bind="email" aria-label="Tu correo electrónico para la newsletter" value="${esc(state.email)}" placeholder="tu@correo.com" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:8px;padding:13px 16px;font-size:14.5px;outline:none;width:250px">
           <button type="submit" style="cursor:pointer;background:#F2665E;color:#fff;border:none;padding:13px 26px;border-radius:8px;font-size:14.5px;text-align:center;white-space:nowrap">Suscribirme</button>
         </form>
         <a href="https://buttondown.com/refer/bluebiobites" target="_blank" rel="noopener" style="font-size:11px;color:#fff;opacity:.45;text-decoration:none;align-self:flex-end">Powered by Buttondown.</a>
       </div>`}
     </div>
     <div class="bbb-3col bbb-3col-footer" style="display:grid;gap:40px">
-      <div><img src="assets/logo.png" alt="" style="width:64px;display:block;filter:brightness(0) invert(1);opacity:.9"><p style="margin:14px 0 0;font-size:15px;opacity:.75"><i>El mar, explicado a bocados.</i></p></div>
+      <div><img src="assets/logo.png" alt="" width="619" height="695" loading="lazy" style="width:64px;height:auto;display:block;filter:brightness(0) invert(1);opacity:.9"><p style="margin:14px 0 0;font-size:15px;opacity:.75"><i>El mar, explicado a bocados.</i></p></div>
       <div style="display:flex;flex-direction:column;gap:9px;font-size:14.5px">
         ${NAV_ITEMS.map(([id, label]) => `<span data-action="nav" data-page="${id}" role="button" tabindex="0" style="cursor:pointer;opacity:.8">${esc(label)}</span>`).join('')}
       </div>
@@ -321,11 +336,11 @@
       <span data-action="cancel-reply" role="button" tabindex="0" style="cursor:pointer;color:#F2665E">Cancelar</span>
     </div>` : ''}
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px">
-      <input data-bind="commentName" value="${esc(state.commentName)}" placeholder="Tu nombre" style="flex:1;min-width:140px;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:12px 16px;font-size:14px;color:#12293A;outline:none">
-      <input data-bind="commentEmail" value="${esc(state.commentEmail)}" placeholder="Tu email (no se publica)" style="flex:1;min-width:180px;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:12px 16px;font-size:14px;color:#12293A;outline:none">
+      <input data-bind="commentName" aria-label="Tu nombre" value="${esc(state.commentName)}" placeholder="Tu nombre" style="flex:1;min-width:140px;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:12px 16px;font-size:14px;color:#12293A;outline:none">
+      <input data-bind="commentEmail" aria-label="Tu email (no se publica)" value="${esc(state.commentEmail)}" placeholder="Tu email (no se publica)" style="flex:1;min-width:180px;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:12px 16px;font-size:14px;color:#12293A;outline:none">
     </div>
     <div class="bbb-row" style="display:flex;gap:12px">
-      <input data-bind="draft" value="${esc(state.draft)}" placeholder="Escribe un comentario…" style="flex:1;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:14px 18px;font-size:14.5px;color:#12293A;outline:none">
+      <input data-bind="draft" aria-label="Escribe un comentario" value="${esc(state.draft)}" placeholder="Escribe un comentario…" style="flex:1;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:14px 18px;font-size:14.5px;color:#12293A;outline:none">
       <span data-action="submit-comment" role="button" tabindex="0" style="cursor:pointer;background:#0B3D57;color:#fff;padding:14px 26px;border-radius:10px;font-size:14.5px;text-align:center">Enviar</span>
     </div>
     ${state.commentError ? `<p style="margin:10px 0 0;font-size:13px;color:#F2665E">${esc(state.commentError)}</p>` : ''}
@@ -364,7 +379,7 @@
       </div>
       <div style="justify-self:center;position:relative;width:400px;max-width:100%;aspect-ratio:1;display:grid;place-items:center">
         <div style="position:absolute;inset:0;border-radius:50%;background-color:#FFFFFFEB;width:403px;height:406px"></div>
-        <img src="assets/logo.png" alt="BlueBioBites" style="position:relative;width:78%;display:block">
+        <img src="assets/logo.png" alt="BlueBioBites" width="619" height="695" style="position:relative;width:78%;height:auto;display:block">
       </div>
     </div>
   </div>
@@ -426,7 +441,7 @@
     return `
 <main class="bbb-pad" style="max-width:1180px;margin:0 auto;padding-top:64px;padding-bottom:80px">
   <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
-    <div style="width:190px;height:190px;border-radius:50%;overflow:hidden;border:3px solid #17A398"><img src="assets/foto.png" alt="Alejandro Galán" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+    <div style="width:190px;height:190px;border-radius:50%;overflow:hidden;border:3px solid #17A398"><img src="assets/foto.png" alt="Alejandro Galán" width="400" height="400" style="width:100%;height:100%;object-fit:cover;display:block"></div>
     <h1 style="margin:26px 0 0;font-size:44px;font-weight:500;letter-spacing:-.03em;color:#0B3D57">Alejandro Galán Galián</h1>
     <p style="margin:10px 0 0;font-size:17px;color:#12293A;opacity:.7">Ciencias del Mar · Biotecnología para la Salud y la Sostenibilidad</p>
     <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center">
@@ -528,7 +543,7 @@
     </div>
     <h1 style="margin:20px 0 0;font-size:46px;line-height:1.08;letter-spacing:-.03em;font-weight:500;color:#0B3D57;text-wrap:balance">${esc(art.title)}</h1>
     <div style="margin-top:16px;display:flex;align-items:center;gap:11px">
-      <span style="width:34px;height:34px;border-radius:50%;overflow:hidden;display:block"><img src="assets/foto.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+      <span style="width:34px;height:34px;border-radius:50%;overflow:hidden;display:block"><img src="assets/foto.png" alt="" width="400" height="400" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></span>
       <span style="font-size:14.5px;color:#12293A;opacity:.75">Por Alejandro Galán</span>
     </div>
     <div style="margin-top:30px;height:340px;border-radius:14px;background:repeating-linear-gradient(135deg,${art.tintA} 0 14px,${art.tintB} 14px 28px);display:grid;place-items:center"><span style="font:11px ui-monospace,Menlo,monospace;color:${art.accent}">imagen destacada</span></div>
@@ -623,6 +638,11 @@
 
   function render() {
     document.title = pageTitle();
+    setMeta('description', pageDescription());
+    setMeta('og:title', pageTitle());
+    setMeta('og:description', pageDescription());
+    setMeta('twitter:title', pageTitle());
+    setMeta('twitter:description', pageDescription());
     const root = document.getElementById('app');
     root.innerHTML = renderHeader() + renderMain() + renderFooter();
   }
