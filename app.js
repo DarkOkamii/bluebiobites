@@ -305,8 +305,8 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:9px;font-size:14.5px">
         <a href="https://www.instagram.com/bluebiobites" target="_blank" rel="noopener" style="color:#fff;opacity:.8;text-decoration:none">Instagram @bluebiobites</a>
-        <a href="https://www.linkedin.com/in/alejandro-galan" target="_blank" rel="noopener" style="color:#fff;opacity:.8;text-decoration:none">LinkedIn · Alejandro Galán</a>
-        <a href="mailto:hola@bluebiobites.com" style="color:#fff;opacity:.8;text-decoration:none">hola@bluebiobites.com</a>
+        <a href="https://www.linkedin.com/in/alejandrogalangalian" target="_blank" rel="noopener" style="color:#fff;opacity:.8;text-decoration:none">LinkedIn · Alejandro Galán</a>
+        <a href="mailto:bluebiobites@gmail.com" style="color:#fff;opacity:.8;text-decoration:none">bluebiobites@gmail.com</a>
       </div>
     </div>
     <div style="margin-top:34px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15);font-size:13px;opacity:.6">© 2026 BlueBioBites &middot; <a href="${ROOT_PREFIX}/privacidad.html" style="color:#fff;opacity:.85">Política de privacidad</a></div>
@@ -488,7 +488,7 @@
   </div>
   <div style="max-width:66ch;margin:48px auto 0;display:flex;flex-direction:column;gap:22px">
     ${BIO.map(t => `<p style="margin:0;font-size:17.5px;line-height:1.75;color:#12293A;opacity:.88;text-align:justify;text-wrap:pretty">${esc(t)}</p>`).join('')}
-    <a href="mailto:hola@bluebiobites.com" style="align-self:flex-start;margin-top:14px;background:#F2665E;color:#fff;padding:14px 30px;border-radius:6px;font-size:15px;text-decoration:none">Escríbeme</a>
+    <a href="mailto:bluebiobites@gmail.com" style="align-self:flex-start;margin-top:14px;background:#F2665E;color:#fff;padding:14px 30px;border-radius:6px;font-size:15px;text-decoration:none">Escríbeme</a>
   </div>
 </main>`;
   }
