@@ -2,6 +2,19 @@
 (() => {
 
   /* ---------------------------------------------------------------- */
+  /* Supabase (comentarios)                                            */
+  /* ---------------------------------------------------------------- */
+  // Sustituye estos dos valores por los de tu propio proyecto de Supabase
+  // (Project Settings -> Data API -> Project URL / anon public key).
+  // La clave "anon" está pensada para ser pública: la seguridad real la
+  // dan las políticas RLS de la tabla "comments", no el secreto de esta clave.
+  const SUPABASE_URL = 'https://xxexeinfestvfdergcmx.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_q91EF5thttjxP5_3tuOWHQ_X4Nz1VRM';
+  const sb = (typeof supabase !== 'undefined' && SUPABASE_URL.indexOf('PON_AQUI') === -1)
+    ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  /* ---------------------------------------------------------------- */
   /* Data                                                              */
   /* ---------------------------------------------------------------- */
 
@@ -21,128 +34,11 @@
     tecnica: {label:'Técnica', emoji:'🔬', accent:'#17A398', bgLight:'#E1F5EE', dark:'#085041'}
   };
 
-  const ARTICLES = [
-    {slug:'vibrio-tcbs', cat:'micro', type:'tecnica', date:'14 julio 2026', read:'7 min',
-     title:'Vibrio en la costa de Alicante: qué aparece en una placa de TCBS',
-     excerpt:'Cultivo selectivo, confirmación por PCR y por qué el color de la colonia cambia toda la lectura de una muestra costera.',
-     bites:['El medio TCBS separa los Vibrio del resto de la microbiota costera por su tolerancia a la sal y al pH alcalino.','El color de la colonia (amarillo o verde) da una primera pista de especie, pero no es un diagnóstico: hace falta confirmación molecular.','Con temperaturas del agua más altas en verano, la ventana en la que estos géneros son detectables se alarga.'],
-     body:[
-       'Cuando uno siembra agua de mar en una placa de TCBS, lo primero que sorprende es lo poco que crece. El medio está diseñado para eso: pH alcalino, sales biliares y alta concentración de cloruro sódico dejan fuera a la mayor parte de la microbiota costera y dejan pasar, sobre todo, al género Vibrio.',
-       'Lo que sí crece se separa por color. Las colonias amarillas fermentan la sacarosa del medio y acidifican el indicador; las verdes no. Es una primera criba útil en el laboratorio, pero conviene decirlo claro: el color no identifica una especie. Distintos aislados pueden compartir apariencia y comportarse de forma muy distinta.',
-       'Por eso el segundo paso no es opcional. Sobre las colonias aisladas se hace extracción de ADN y una PCR dirigida a genes marcadores, y solo entonces se puede hablar de una identificación con cierta seguridad. En muestras de la costa alicantina, ese doble paso es lo que separa "aquí hay algo compatible con Vibrio" de "aquí hay esta especie concreta".',
-       'La parte interesante no es el microorganismo aislado, sino el contexto. La abundancia de estos géneros responde a la temperatura del agua, a la salinidad y a la materia orgánica disponible; en veranos largos y cálidos, la ventana temporal en la que se detectan con facilidad se alarga. Eso importa para la acuicultura y para la vigilancia sanitaria costera, que es donde acaba aterrizando este tipo de muestreo.'],
-     ref:['Baker-Austin, C., Oliver, J. D., Alam, M., Ali, A., Waldor, M. K., Qadri, F., & Martinez-Urtaza, J. (2018). Vibrio spp. infections. Nature Reviews Disease Primers, 4(1), 8. https://doi.org/10.1038/s41572-018-0005-8']},
+  let ARTICLES = [];
 
-    {slug:'pacbio-16s', cat:'gen', type:'tecnica', date:'2 julio 2026', read:'9 min',
-     title:'Leer el 16S de un tirón: qué cambia con PacBio',
-     excerpt:'Del fragmento corto al gen completo, y por qué eso sube la resolución taxonómica hasta el nivel de especie.',
-     bites:['La mayoría de estudios de microbiota amplifican solo una o dos regiones variables del gen 16S; PacBio permite leer el gen entero en una sola lectura.','Más longitud significa mejor resolución taxonómica: donde antes se llegaba a género, ahora se puede afinar a especie.','No es magia: los sesgos de extracción, de PCR y de base de datos siguen ahí.'],
-     body:[
-       'El gen 16S del ARN ribosómico lleva décadas siendo la regla de medir de la ecología microbiana. Tiene regiones muy conservadas, útiles para diseñar cebadores universales, y regiones variables que cambian entre grupos y sirven para clasificar.',
-       'El problema clásico es de longitud. Las plataformas de lectura corta obligan a elegir un trozo, normalmente V3-V4, y a partir de ahí clasificar. Funciona razonablemente bien hasta género, pero por debajo la señal se agota: dos especies distintas pueden ser idénticas en la región elegida.',
-       'La secuenciación de lectura larga cambia esa ecuación. Al leer el gen completo de una sola vez, y con lecturas circulares de alta fidelidad, la clasificación gana resolución y muchas asignaciones que antes se quedaban en "género sp." pasan a tener nombre y apellido.',
-       'Conviene no sobrevender el salto. Sigue habiendo sesgos en la extracción de ADN, en la amplificación y en las bases de datos de referencia, que están mejor pobladas para unos ambientes que para otros. Lo que cambia es la resolución del último paso, no la fiabilidad de toda la cadena.'],
-     ref:['Callahan, B. J., Wong, J., Heiner, C., Oh, S., Theriot, C. M., Gulati, A. S., McGill, S. K., & Dougherty, M. K. (2019). High-throughput amplicon sequencing of the full-length 16S rRNA gene with single-nucleotide resolution. Nucleic Acids Research, 47(18), e103. https://doi.org/10.1093/nar/gkz569']},
+  let BIO = [];
 
-    {slug:'hediste-pienso', cat:'acui', type:'noticia', date:'21 junio 2026', read:'6 min',
-     title:'Un poliqueto en el pienso: el caso de Hediste diversicolor',
-     excerpt:'Dieta, agua tratada con luz ultravioleta y una microbiota que responde a las dos cosas.',
-     bites:['Hediste diversicolor se cultiva como fuente de proteína y ácidos grasos para piensos acuícolas.','La dieta y el tratamiento UV del agua de cultivo modifican la microbiota del gusano de forma medible.','Controlar esa microbiota es parte del control de calidad del ingrediente, no un detalle secundario.'],
-     body:[
-       'La acuicultura lleva años buscando cómo salir de la harina de pescado. Entre los candidatos, los poliquetos tienen una ventaja incómoda de ignorar: crecen rápido, aprovechan residuos orgánicos y tienen un perfil de ácidos grasos que interesa a las dietas de reproductores.',
-       'Hediste diversicolor es el ejemplo más trabajado en Europa. Vive en sedimentos intermareales, tolera cambios fuertes de salinidad y se puede cultivar en sistemas relativamente sencillos. La pregunta operativa no es si crece, sino qué se lleva dentro cuando entra en la cadena del pienso.',
-       'Ahí entra la microbiota. Lo que el gusano come y cómo se trata el agua de cultivo se reflejan en la comunidad bacteriana que alberga. Un tratamiento con luz ultravioleta reduce la carga microbiana del agua de entrada, y esa presión se nota aguas abajo, en el propio animal.',
-       'La conclusión práctica es poco espectacular pero útil: si el poliqueto se va a usar como ingrediente, su microbiota forma parte de la especificación del producto. Medirla con secuenciación es hoy más barato que asumir que da igual.'],
-     ref:'Wang, H., Hagemann, A., Reitan, K. I., Ejlertsson, J., Wollan, H., Handå, A., & Malzahn, A. M. (2019). Potential of the polychaete Hediste diversicolor fed on aquaculture and biogas side streams as an aquaculture food source. Aquaculture Environment Interactions, 11, 551-562. https://doi.org/10.3354/aei00330'},
-
-    {slug:'bomba-carbono', cat:'ocea', type:'noticia', date:'9 junio 2026', read:'8 min',
-     title:'La bomba biológica de carbono, en tres pasos',
-     excerpt:'Cómo el carbono que fija el plancton en superficie acaba, con suerte, en el fondo del océano durante siglos.',
-     bites:['El fitoplancton fija CO2 en superficie; una fracción pequeña de ese carbono escapa del reciclado y se hunde.','La profundidad a la que se remineraliza determina cuánto tiempo queda el carbono fuera de la atmósfera.','Es uno de los procesos peor restringidos en los modelos climáticos actuales.'],
-     body:[
-       'La llamada bomba biológica es, en esencia, un ascensor de bajada. El fitoplancton fija carbono en la capa iluminada, parte de esa materia orgánica se agrega en partículas o pasa por el intestino del zooplancton, y esas partículas se hunden.',
-       'La mayor parte del carbono no llega lejos: bacterias y zooplancton lo remineralizan en los primeros cientos de metros y vuelve a estar disponible en superficie en cuestión de meses o pocos años. El destino climático se juega en la profundidad exacta a la que ocurre esa remineralización.',
-       'Si el carbono se descompone por encima de la termoclina permanente, vuelve pronto. Si atraviesa esa barrera, puede quedar aislado de la atmósfera durante siglos. Unas decenas de metros de diferencia cambian el orden de magnitud del tiempo de residencia.',
-       'Por eso es un proceso incómodo para los modelos: pequeño en porcentaje, enorme en efecto acumulado, y difícil de medir directamente. Las campañas con trampas de sedimento y flotadores autónomos han mejorado mucho las estimaciones, pero el margen de incertidumbre sigue siendo amplio.'],
-     ref:'Boyd, P. W., Claustre, H., Levy, M., Siegel, D. A., & Weber, T. (2019). Multi-faceted particle pumps drive carbon sequestration in the ocean. Nature, 568(7752), 327-335. https://doi.org/10.1038/s41586-019-1098-2'},
-
-    {slug:'quitosano-hongos', cat:'biot', type:'tecnica', date:'28 mayo 2026', read:'7 min',
-     title:'Quitosano y hongos de control biológico: hablar en volátiles',
-     excerpt:'Un polisacárido del caparazón de los crustáceos que modifica lo que dos hongos usados frente a plagas emiten al aire.',
-     bites:['El quitosano se obtiene de la quitina del caparazón de crustáceos, un residuo abundante del sector pesquero.','Añadirlo al medio altera el perfil de compuestos volátiles que emiten Pochonia chlamydosporia y Purpureocillium lilacinum.','Esos volátiles no son un subproducto: participan en la interacción del hongo con plantas y plagas.'],
-     body:[
-       'La quitina es el segundo biopolímero más abundante del planeta y, en buena parte, acaba en el contenedor: caparazones de gamba, cangrejo y langostino. El quitosano es su derivado desacetilado, soluble y biológicamente activo, y ese origen residual es parte de su atractivo.',
-       'Pochonia chlamydosporia y Purpureocillium lilacinum se usan como agentes de control biológico frente a nematodos fitoparásitos. Son hongos que colonizan la rizosfera y que, además de parasitar huevos, se comunican químicamente con su entorno.',
-       'Cuando se añade quitosano al medio de cultivo, el perfil de compuestos orgánicos volátiles que emiten estos hongos cambia. Aparecen y desaparecen compuestos, y varían las proporciones, lo que sugiere una respuesta metabólica al polisacárido y no un simple efecto de dosis.',
-       'La relevancia está en el uso agrícola: si el quitosano modula lo que el hongo emite, también puede modular su eficacia en campo. Es un ejemplo bastante limpio de biotecnología marina aplicada fuera del mar, con un residuo pesquero como punto de partida.'],
-     ref:['Escudero, N., Lopez-Moya, F., Ghahremani, Z., Zavala-Gonzalez, E. A., Alaguero-Cordovilla, A., Ros-Ibañez, C., Lacasa, A., Sorribas, F. J., & Lopez-Llorca, L. V. (2017). Chitosan increases tomato root colonization by Pochonia chlamydosporia and their combination reduces root-knot nematode damage. Frontiers in Plant Science, 8, 1415. https://doi.org/10.3389/fpls.2017.01415']},
-
-    {slug:'microplasticos-seychelles', cat:'eco', type:'noticia', date:'15 mayo 2026', read:'10 min',
-     title:'Microplásticos en islas remotas: lo que cuenta el Raman',
-     excerpt:'Muestras ambientales de las Seychelles analizadas con espectroscopía Raman: qué polímeros aparecen lejos de cualquier ciudad.',
-     bites:['La espectroscopía Raman identifica el polímero de partículas muy pequeñas, donde la inspección visual ya no sirve.','Las islas remotas acumulan plástico que no han generado: llega por corrientes y por la pesca.','Lo que se cuenta depende del tamaño mínimo que el método puede detectar; sin ese dato, las cifras no son comparables.'],
-     body:[
-       'Contar microplásticos parece sencillo hasta que se hace. Bajo la lupa, muchas partículas sospechosas resultan ser fibras naturales o restos minerales, y muchas partículas reales pasan desapercibidas por tamaño o color.',
-       'La espectroscopía Raman resuelve buena parte de ese problema: mide cómo dispersa la luz una partícula y devuelve una huella espectral que se compara con una biblioteca de polímeros. Con ella se puede decir si aquello es polietileno, polipropileno o poliéster, y no solo "plástico".',
-       'Aplicado a muestras de las Seychelles, el ejercicio tiene un componente casi incómodo: son islas con poca población y una industria mínima, y aun así aparecen polímeros de uso masivo y restos asociados a artes de pesca. Lo que llega, llega por mar.',
-       'La lección metodológica es tan importante como la ambiental. Las cifras de abundancia solo son comparables si se declara el tamaño mínimo detectable, el método de separación y el criterio de identificación. Sin eso, dos estudios del mismo lugar pueden diferir en un orden de magnitud sin que ninguno esté equivocado.'],
-     ref:'Araujo, C. F., Nolasco, M. M., Ribeiro, A. M. P., & Ribeiro-Claro, P. J. A. (2018). Identification of microplastics using Raman spectroscopy: Latest developments and future prospects. Water Research, 142, 426-440. https://doi.org/10.1016/j.watres.2018.05.060'},
-
-    {slug:'ficobiliproteinas', cat:'quim', type:'tecnica', date:'30 abril 2026', read:'6 min',
-     title:'Ficobiliproteínas: el color que las algas le venden a la industria',
-     excerpt:'Pigmentos fluorescentes de cianobacterias y algas rojas que acabaron como colorante alimentario y como reactivo de laboratorio.',
-     bites:['Las ficobiliproteínas captan luz en longitudes de onda que la clorofila aprovecha mal.','Su fluorescencia intensa las convirtió en marcadores estándar en citometría de flujo.','El cuello de botella industrial no es producirlas, es estabilizarlas.'],
-     body:[
-       'En el agua, la luz roja se extingue en los primeros metros y lo que queda abajo es azul y verde. Las cianobacterias y las algas rojas resolvieron ese problema con ficobiliproteínas: complejos proteína-pigmento que absorben justo donde la clorofila es ineficaz y transfieren esa energía al centro de reacción.',
-       'La ficocianina es azul; la ficoeritrina, rosa. Ambas son intensamente fluorescentes, y eso les abrió una segunda vida fuera de la fotosíntesis: como marcadores en citometría de flujo y en inmunoensayos, donde su brillo supera al de muchos fluoróforos sintéticos.',
-       'En paralelo, la ficocianina se ha ganado un hueco como colorante alimentario natural, sobre todo en productos que buscan evitar los azules sintéticos. La producción a partir de Arthrospira a escala industrial ya está resuelta.',
-       'El problema real es la estabilidad. Son proteínas: el calor, la luz y el pH ácido las degradan y el color se va. Buena parte de la investigación aplicada actual no busca producir más, sino encapsularlas y formularlas para que aguanten el proceso y la vida útil del producto.'],
-     ref:['Pagels, F., Guedes, A. C., Amaro, H. M., Kijjoa, A., & Vasconcelos, V. (2019). Phycobiliproteins from cyanobacteria: Chemistry and biotechnological applications. Biotechnology Advances, 37(3), 422-443. https://doi.org/10.1016/j.biotechadv.2019.02.010']},
-
-    {slug:'tiburon-peregrino', cat:'bio', type:'noticia', date:'18 abril 2026', read:'8 min',
-     title:'El tiburón peregrino en el Mediterráneo: avistamientos y datos',
-     excerpt:'El segundo pez más grande del mundo se alimenta de plancton y aparece cada primavera frente a la costa. Qué sabemos y qué no.',
-     bites:['Cetorhinus maximus puede superar los 8 metros y se alimenta filtrando zooplancton.','Los avistamientos costeros se concentran en primavera, cuando florece su alimento.','La ciencia ciudadana ha multiplicado los registros, pero un avistamiento no equivale a un individuo.'],
-     body:[
-       'Cada primavera reaparece la misma noticia con la misma foto borrosa: una aleta grande cerca de la costa. Casi siempre es Cetorhinus maximus, el tiburón peregrino, un animal que puede pasar de los ocho metros y que se alimenta exclusivamente de plancton.',
-       'Su biología explica el calendario. Filtra grandes volúmenes de agua para capturar zooplancton, así que sigue las concentraciones de alimento; cuando el plancton florece cerca de la costa, el tiburón se acerca a la costa. No hay nada más detrás del titular.',
-       'Los datos mediterráneos son escasos comparados con los del Atlántico nororiental. Las series históricas provienen en buena parte de capturas accidentales, y los registros recientes dependen mucho de avistamientos oportunistas y de redes de ciencia ciudadana.',
-       'Ese es también su límite. Un avistamiento no es un individuo: sin marcaje o identificación fotográfica no se puede saber si son diez animales o el mismo diez veces. Para una especie catalogada como amenazada, esa diferencia no es menor a la hora de estimar tendencias.'],
-     ref:'Sims, D. W. (2008). Sieving a living: A review of the biology, ecology and conservation status of the plankton-feeding basking shark Cetorhinus maximus. Advances in Marine Biology, 54, 171-220. https://doi.org/10.1016/S0065-2881(08)00003-5'}
-  ];
-
-  const BIO = [
-   'Me llamo Alejandro Galán, soy graduado en Ciencias del Mar y acabo de terminar el Máster en Biotecnología para la Salud y la Sostenibilidad en la Universidad de Alicante. Entre ambas etapas, mi formación ha ido de lo más amplio del océano, ecosistemas, especies, dinámicas marinas, a lo más pequeño y aplicado: microorganismos, biomoléculas, procesos biotecnológicos con potencial real para la salud y la sostenibilidad.',
-   'Durante el grado participé en un proyecto de investigación sobre microplásticos en islas remotas, analizando muestras ambientales de las Seychelles mediante espectroscopía Raman en el Parque Científico de Alicante, la cual fue mi primera toma de contacto con cómo el laboratorio puede responder preguntas muy concretas sobre el impacto humano en el mar. Mi TFG fue un paso más allá: estudié cómo el quitosano, un polisacárido derivado del caparazón de los crustáceos, afecta a dos hongos usados como agentes de control biológico frente a plagas, Pochonia chlamydosporia y Purpureocillium lilacinum, analizando los compuestos volátiles que emiten.',
-   'Ya en el máster, mi trabajo se ha orientado hacia la biotecnología marina aplicada a la acuicultura. En el laboratorio de Microbiología de la UA trabajé en el aislamiento y caracterización de bacterias del género Vibrio en muestras costeras de Alicante, combinando cultivo selectivo en medio TCBS con confirmación molecular por PCR. Esa línea de trabajo desembocó en mi Trabajo de Fin de Máster, donde evalué cómo la dieta y el tratamiento con luz ultravioleta del agua de cultivo afectan a la microbiota de Hediste diversicolor, un poliqueto con potencial como ingrediente en piensos acuícolas, mediante secuenciación completa del gen 16S ARNr con tecnología PacBio.',
-   'Fuera del laboratorio, también me acerco al mar buceando; siempre he dicho que soy más de aleta que de bota. Tengo las titulaciones Advanced Open Water y Enriched Air Diver, las cuales me permiten un contacto directo con el ecosistema que estudio desde el laboratorio.',
-   'BlueBioBites nace de las ganas de no dejar esa lectura científica en la carpeta del ordenador. Terminado el máster, sigo leyendo artículos por gusto — y este espacio es la forma de convertir esa costumbre en algo que también le sirva a otra persona.',
-   'Aquí no vas a encontrar titulares sensacionalistas ni promesas de "revolucionar" nada. Solo ciencia marina explicada con el mismo rigor con el que se lee en el laboratorio o en el barco, pero sin la jerga que sobra.',
-   'Además de los artículos, voy recopilando charlas, congresos y eventos sobre biología, biotecnología y microbiología marina en Alicante, Elche, Murcia y alrededores, porque parte de la ciencia también pasa por estar ahí, en persona.'
-  ];
-
-  const EVENTS = [
-   {day:'18', month:'sep', year:'2026', type:'Charla', title:'Microbiota y acuicultura: del laboratorio al pienso', place:'Aula Magna, Facultad de Ciencias', org:'Universidad de Alicante', time:'18:00', url:'#', upcoming:true},
-   {day:'02', month:'oct', year:'2026', type:'Congreso', title:'III Jornadas de Biotecnología Azul', place:'Edificio Altet', org:'Universidad Miguel Hernández, Elche', time:'09:30', url:'#', upcoming:true},
-   {day:'21', month:'oct', year:'2026', type:'Taller', title:'Identificación molecular de Vibrio spp. en muestras costeras', place:'Centro Oceanográfico de Murcia', org:'IEO-CSIC', time:'16:00', url:'#', upcoming:true},
-   {day:'14', month:'nov', year:'2026', type:'Charla', title:'Microplásticos: del muestreo al espectro Raman', place:'Sede Ciudad de Alicante', org:'Universidad de Alicante', time:'19:00', url:'#', upcoming:true},
-   {day:'27', month:'mar', year:'2026', type:'Congreso', title:'Encuentro de Jóvenes Investigadores del Mar', place:'Facultad de Ciencias del Mar', org:'Universidad de Alicante', time:'', url:'#', upcoming:false},
-   {day:'12', month:'feb', year:'2026', type:'Taller', title:'Introducción al análisis de amplicones 16S', place:'Parque Científico de Alicante', org:'PCA', time:'', url:'#', upcoming:false},
-   {day:'05', month:'dic', year:'2025', type:'Charla', title:'Poliquetos, residuos y economía circular en acuicultura', place:'Campus de Santiago Bernabéu', org:'UPCT, Cartagena', time:'', url:'#', upcoming:false}
-  ];
-
-  const SEED_COMMENTS = {
-    general: [
-      {name:'Marta R.', when:'hace 3 días', color:'#17A398', text:'Justo estoy con TCBS en prácticas y lo del viraje del color me ha aclarado bastante. ¿Habrá segunda parte con la PCR?'},
-      {name:'Jorge P.', when:'hace 1 semana', color:'#0B3D57', text:'¿Añadirás eventos de Murcia? En la UPCT hay un ciclo de acuicultura este otoño que encajaría bien.'}
-    ],
-    'vibrio-tcbs': [
-      {name:'Lucía M.', when:'hace 5 días', color:'#7B5EA7', text:'Muy claro lo de que el color no es diagnóstico. En clase se explica al revés y luego pasa lo que pasa.'}
-    ],
-    'pacbio-16s': [
-      {name:'Dani S.', when:'hace 2 semanas', color:'#C9558B', text:'¿Merece la pena el coste extra de lectura larga para un TFM, o compensa quedarse en V3-V4?'}
-    ]
-  };
+  let EVENTS = [];
 
   const NAV_ITEMS = [['inicio','Inicio'],['sobre','Sobre mí'],['articulos','Artículos'],['agenda','Agenda']];
   const PER_PAGE = 6;
@@ -154,7 +50,9 @@
   const state = {
     page: 'inicio', slug: null, cats: [], types: [], query: '', pageNum: 1,
     searchOpen: false, menuOpen: false, draft: '', email: '', subscribed: false,
-    comments: JSON.parse(JSON.stringify(SEED_COMMENTS))
+    comments: {},
+    commentName: '', commentEmail: '', replyingTo: null,
+    commentError: null, commentSent: false
   };
 
   let suppressHashHandling = false;
@@ -195,6 +93,70 @@
 
   function commentsKey() {
     return state.page === 'articulo' ? currentArticle().slug : 'general';
+  }
+
+  async function fetchComments() {
+    if (!sb) return; // Supabase aún no configurado: no hay comentarios que mostrar
+    const { data, error } = await sb
+      .from('comments')
+      .select('id, article_slug, parent_id, name, text, is_author, created_at')
+      .eq('approved', true)
+      .order('created_at', { ascending: true });
+    if (error) { console.error('Error cargando comentarios:', error); return; }
+
+    const byId = {};
+    (data || []).forEach(c => { byId[c.id] = Object.assign({}, c, {replies: []}); });
+    const grouped = {};
+    (data || []).forEach(c => {
+      const node = byId[c.id];
+      if (c.parent_id && byId[c.parent_id]) {
+        byId[c.parent_id].replies.push(node);
+      } else {
+        grouped[c.article_slug] = grouped[c.article_slug] || [];
+        grouped[c.article_slug].push(node);
+      }
+    });
+    state.comments = grouped;
+  }
+
+  async function submitComment() {
+    const text = state.draft.trim();
+    const name = state.commentName.trim();
+    const email = state.commentEmail.trim();
+    if (!name || !email || !text) {
+      state.commentError = 'Rellena tu nombre, tu email y el comentario.';
+      render();
+      return;
+    }
+    if (email.indexOf('@') <= 0) {
+      state.commentError = 'Revisa el email, no parece válido.';
+      render();
+      return;
+    }
+    if (!sb) {
+      state.commentError = 'Los comentarios todavía no están activados en esta web.';
+      render();
+      return;
+    }
+    const key = commentsKey();
+    const { error } = await sb.from('comments').insert({
+      article_slug: key,
+      parent_id: state.replyingTo,
+      name, email, text,
+      approved: false,
+      is_author: false
+    });
+    if (error) {
+      console.error('Error enviando comentario:', error);
+      state.commentError = 'No se ha podido enviar el comentario. Inténtalo de nuevo.';
+      render();
+      return;
+    }
+    state.draft = '';
+    state.replyingTo = null;
+    state.commentError = null;
+    state.commentSent = true;
+    render();
   }
 
   function parseHash() {
@@ -300,16 +262,77 @@
 </footer>`;
   }
 
+  const COMMENT_COLORS = ['#17A398','#0B3D57','#7B5EA7','#C9558B','#4C9A63','#D98E2B','#4A6B8A','#F2665E'];
+  function colorForName(name) {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return COMMENT_COLORS[h % COMMENT_COLORS.length];
+  }
+
+  function timeAgo(iso) {
+    const diffMs = Date.now() - new Date(iso).getTime();
+    const min = Math.floor(diffMs / 60000);
+    if (min < 1) return 'ahora mismo';
+    if (min < 60) return `hace ${min} min`;
+    const h = Math.floor(min / 60);
+    if (h < 24) return `hace ${h} h`;
+    const d = Math.floor(h / 24);
+    if (d < 7) return `hace ${d} d`;
+    const w = Math.floor(d / 7);
+    if (w < 5) return `hace ${w} sem`;
+    const mo = Math.floor(d / 30);
+    return `hace ${mo} mes${mo === 1 ? '' : 'es'}`;
+  }
+
+  function renderCommentNode(c, isReply) {
+    const bg = state.page === 'articulo' ? '#F7F1E3' : '#fff';
+    const badge = c.is_author ? `<span style="background:#17A398;color:#fff;font-size:11px;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle">Autor</span>` : '';
+    const replyBtn = isReply ? '' : `<span data-action="reply-to" data-comment-id="${esc(c.id)}" data-comment-name="${esc(c.name)}" role="button" tabindex="0" style="cursor:pointer;color:#17A398;font-size:13px;margin-top:6px;display:inline-block">Responder</span>`;
+    const replies = (c.replies && c.replies.length)
+      ? `<div style="display:flex;flex-direction:column;gap:14px;margin-top:14px;padding-left:24px;border-left:2px solid #e2ddd2">${c.replies.map(r => renderCommentNode(r, true)).join('')}</div>`
+      : '';
+    return `
+  <div style="display:flex;gap:14px">
+    <span style="flex:none;width:38px;height:38px;border-radius:50%;color:#fff;display:grid;place-items:center;font-size:14px;background:${colorForName(c.name)}">${esc(c.name.charAt(0).toUpperCase())}</span>
+    <div style="flex:1">
+      <div style="background:${bg};border-radius:4px 14px 14px 14px;padding:14px 18px">
+        <div style="font-size:13.5px;color:#0B3D57;margin-bottom:5px">${esc(c.name)}${badge} · ${timeAgo(c.created_at)}</div>
+        <p style="margin:0;font-size:14.5px;line-height:1.6;color:#12293A;opacity:.85">${esc(c.text)}</p>
+      </div>
+      ${replyBtn}
+      ${replies}
+    </div>
+  </div>`;
+  }
+
   function renderComments(key) {
     const list = state.comments[key] || [];
+    const flat = list.concat(...list.map(c => c.replies || []));
+    const replyingComment = state.replyingTo ? flat.find(c => c.id === state.replyingTo) : null;
+
     return `
-<div style="display:flex;flex-direction:column;gap:14px${state.page === 'articulo' ? '' : ';max-width:780px'}">
-  ${list.map(c => `
-  <div style="display:flex;gap:14px"><span style="flex:none;width:38px;height:38px;border-radius:50%;color:#fff;display:grid;place-items:center;font-size:14px;background:${c.color}">${esc(c.name.charAt(0))}</span><div style="background:${state.page === 'articulo' ? '#F7F1E3' : '#fff'};border-radius:4px 14px 14px 14px;padding:14px 18px"><div style="font-size:13.5px;color:#0B3D57;margin-bottom:5px">${esc(c.name)} · ${esc(c.when)}</div><p style="margin:0;font-size:14.5px;line-height:1.6;color:#12293A;opacity:.85">${esc(c.text)}</p></div></div>`).join('')}
-  <div class="bbb-row" style="display:flex;gap:12px;margin-top:${state.page === 'articulo' ? '6' : '8'}px">
-    <input data-bind="draft" value="${esc(state.draft)}" placeholder="Escribe un comentario…" style="flex:1;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:14px 18px;font-size:14.5px;color:#12293A;outline:none">
-    <span data-action="submit-comment" role="button" tabindex="0" style="cursor:pointer;background:#0B3D57;color:#fff;padding:14px 26px;border-radius:10px;font-size:14.5px;text-align:center">Enviar</span>
+<div style="display:flex;flex-direction:column;gap:18px${state.page === 'articulo' ? '' : ';max-width:780px'}">
+  ${list.length ? list.map(c => renderCommentNode(c, false)).join('') : `<p style="margin:0;font-size:14.5px;color:#12293A;opacity:.6">Todavía no hay comentarios. ¡Sé el primero!</p>`}
+
+  ${!sb ? `<p style="margin:0;font-size:13.5px;color:#F2665E">Los comentarios están desactivados de momento en esta web.</p>` : `
+  <div style="background:${state.page === 'articulo' ? '#fff' : '#F7F1E3'};border-radius:14px;padding:18px;margin-top:4px">
+    ${replyingComment ? `<div style="display:flex;justify-content:space-between;align-items:center;font-size:13.5px;color:#0B3D57;margin-bottom:10px">
+      <span>Respondiendo a <strong>${esc(replyingComment.name)}</strong></span>
+      <span data-action="cancel-reply" role="button" tabindex="0" style="cursor:pointer;color:#F2665E">Cancelar</span>
+    </div>` : ''}
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+      <input data-bind="commentName" value="${esc(state.commentName)}" placeholder="Tu nombre" style="flex:1;min-width:140px;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:12px 16px;font-size:14px;color:#12293A;outline:none">
+      <input data-bind="commentEmail" value="${esc(state.commentEmail)}" placeholder="Tu email (no se publica)" style="flex:1;min-width:180px;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:12px 16px;font-size:14px;color:#12293A;outline:none">
+    </div>
+    <div class="bbb-row" style="display:flex;gap:12px">
+      <input data-bind="draft" value="${esc(state.draft)}" placeholder="Escribe un comentario…" style="flex:1;background:#fff;border:1px solid #e2ddd2;border-radius:10px;padding:14px 18px;font-size:14.5px;color:#12293A;outline:none">
+      <span data-action="submit-comment" role="button" tabindex="0" style="cursor:pointer;background:#0B3D57;color:#fff;padding:14px 26px;border-radius:10px;font-size:14.5px;text-align:center">Enviar</span>
+    </div>
+    ${state.commentError ? `<p style="margin:10px 0 0;font-size:13px;color:#F2665E">${esc(state.commentError)}</p>` : ''}
+    ${state.commentSent ? `<p style="margin:10px 0 0;font-size:13px;color:#17A398">¡Gracias! Tu comentario queda pendiente de revisión y se publicará en breve.</p>` : ''}
+    <p style="margin:10px 0 0;font-size:12px;color:#12293A;opacity:.55">Tu email no se muestra públicamente; solo se usa para poder contactarte si hace falta.</p>
   </div>
+  `}
 </div>`;
   }
 
@@ -628,16 +651,6 @@
   /* Actions                                                           */
   /* ---------------------------------------------------------------- */
 
-  function submitComment() {
-    const t = state.draft.trim();
-    if (!t) return;
-    const key = commentsKey();
-    state.comments[key] = (state.comments[key] || []).concat([
-      {name: 'Tú', when: 'ahora mismo', color: '#F2665E', text: t}
-    ]);
-    state.draft = '';
-    render();
-  }
 
   /* ---------------------------------------------------------------- */
   /* Event delegation                                                  */
@@ -654,6 +667,8 @@
     if (action === 'clear-filters') { state.cats = []; state.types = []; state.query = ''; state.pageNum = 1; render(); return; }
     if (action === 'go-page') { state.pageNum = Number(el.dataset.pageNum); window.scrollTo(0, 0); render(); return; }
     if (action === 'submit-comment') { submitComment(); return; }
+    if (action === 'reply-to') { state.replyingTo = el.dataset.commentId; render(); return; }
+    if (action === 'cancel-reply') { state.replyingTo = null; render(); return; }
   }
 
   // The newsletter form posts for real to Buttondown, targeting a hidden
@@ -701,6 +716,13 @@
       renderPreserveFocus();
     } else if (bind === 'draft') {
       state.draft = el.value;
+      state.commentSent = false;
+    } else if (bind === 'commentName') {
+      state.commentName = el.value;
+      state.commentSent = false;
+    } else if (bind === 'commentEmail') {
+      state.commentEmail = el.value;
+      state.commentSent = false;
     } else if (bind === 'email') {
       state.email = el.value;
     }
@@ -734,7 +756,21 @@
   /* Bootstrap                                                         */
   /* ---------------------------------------------------------------- */
 
-  function init() {
+  async function loadContent() {
+    const [articulosRes, bioRes, agendaRes] = await Promise.all([
+      fetch('content/articulos.json'),
+      fetch('content/sobre-mi.json'),
+      fetch('content/agenda.json')
+    ]);
+    const [articulosData, bioData, agendaData] = await Promise.all([
+      articulosRes.json(), bioRes.json(), agendaRes.json()
+    ]);
+    ARTICLES = articulosData.articulos;
+    BIO = bioData.parrafos;
+    EVENTS = agendaData.eventos;
+  }
+
+  async function init() {
     const root = document.getElementById('app');
     root.addEventListener('click', onClick);
     root.addEventListener('keydown', onKeydown);
@@ -745,6 +781,22 @@
 
     const frame = document.getElementById('bbb-subscribe-frame');
     if (frame) frame.addEventListener('load', onNewsletterFrameLoad);
+
+    root.innerHTML = '<div style="padding:100px 20px;text-align:center;color:#0B3D57;font-family:sans-serif">Cargando…</div>';
+
+    try {
+      await loadContent();
+    } catch (err) {
+      root.innerHTML = '<div style="padding:100px 20px;text-align:center;color:#F2665E;font-family:sans-serif">No se ha podido cargar el contenido. Recarga la página.</div>';
+      return;
+    }
+
+    try {
+      await fetchComments();
+    } catch (err) {
+      console.error('No se han podido cargar los comentarios:', err);
+      // No bloqueamos el resto de la web si los comentarios fallan
+    }
 
     const initial = parseHash();
     Object.assign(state, initial);
