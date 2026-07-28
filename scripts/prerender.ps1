@@ -127,6 +127,7 @@ foreach ($a in $articulos) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script src="../../analytics.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>$(Esc-Html $a.title) — BlueBioBites</title>
