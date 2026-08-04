@@ -1,88 +1,136 @@
 {
-  "eventos": [
-    {
-      "day": "18",
-      "month": "sep",
-      "year": "2026",
-      "type": "Charla",
-      "title": "Microbiota y acuicultura: del laboratorio al pienso",
-      "place": "Aula Magna, Facultad de Ciencias",
-      "org": "Universidad de Alicante",
-      "time": "18:00",
-      "url": "#",
-      "upcoming": true
-    },
-    {
-      "day": "02",
-      "month": "oct",
-      "year": "2026",
-      "type": "Congreso",
-      "title": "III Jornadas de Biotecnología Azul",
-      "place": "Edificio Altet",
-      "org": "Universidad Miguel Hernández, Elche",
-      "time": "09:30",
-      "url": "#",
-      "upcoming": true
-    },
-    {
-      "day": "21",
-      "month": "oct",
-      "year": "2026",
-      "type": "Taller",
-      "title": "Identificación molecular de Vibrio spp. en muestras costeras",
-      "place": "Centro Oceanográfico de Murcia",
-      "org": "IEO-CSIC",
-      "time": "16:00",
-      "url": "#",
-      "upcoming": true
-    },
-    {
-      "day": "14",
-      "month": "nov",
-      "year": "2026",
-      "type": "Charla",
-      "title": "Microplásticos: del muestreo al espectro Raman",
-      "place": "Sede Ciudad de Alicante",
-      "org": "Universidad de Alicante",
-      "time": "19:00",
-      "url": "#",
-      "upcoming": true
-    },
-    {
-      "day": "27",
-      "month": "mar",
-      "year": "2026",
-      "type": "Congreso",
-      "title": "Encuentro de Jóvenes Investigadores del Mar",
-      "place": "Facultad de Ciencias del Mar",
-      "org": "Universidad de Alicante",
-      "time": "",
-      "url": "#",
-      "upcoming": false
-    },
-    {
-      "day": "12",
-      "month": "feb",
-      "year": "2026",
-      "type": "Taller",
-      "title": "Introducción al análisis de amplicones 16S",
-      "place": "Parque Científico de Alicante",
-      "org": "PCA",
-      "time": "",
-      "url": "#",
-      "upcoming": false
-    },
-    {
-      "day": "05",
-      "month": "dic",
-      "year": "2025",
-      "type": "Charla",
-      "title": "Poliquetos, residuos y economía circular en acuicultura",
-      "place": "Campus de Santiago Bernabéu",
-      "org": "UPCT, Cartagena",
-      "time": "",
-      "url": "#",
-      "upcoming": false
-    }
-  ]
+    "eventos": [
+          {
+                  "day": "01",
+                  "month": "sep",
+                  "year": "2026",
+                  "type": "Webinar",
+                  "title": "Deep-sea marine genetic resources, BBNJ & bioprospecting",
+                  "place": "Online",
+                  "org": "COBRA (Crustal Ocean Biosphere Research Accelerator)",
+                  "time": "15:00 (hora este EE. UU.)",
+                  "url": "https://cobra.bigelow.org/webinars/",
+                  "upcoming": true
+          },
+          {
+                  "day": "15",
+                  "month": "sep",
+                  "year": "2026",
+                  "type": "Congreso",
+                  "title": "ICES Annual Science Conference 2026",
+                  "place": "Le Quartz, Brest (Francia)",
+                  "org": "International Council for the Exploration of the Sea (ICES)",
+                  "time": "",
+                  "url": "https://eurogoos.eu/events/ices-2026-annual-science-conference/",
+                  "upcoming": true
+          },
+          {
+                  "day": "28",
+                  "month": "sep",
+                  "year": "2026",
+                  "type": "Congreso",
+                  "title": "Aquaculture Europe 2026 (AE2026)",
+                  "place": "Ljubljana (Eslovenia)",
+                  "org": "European Aquaculture Society (EAS)",
+                  "time": "",
+                  "url": "https://www.aquaeas.eu/AE-2026",
+                  "upcoming": true
+          },
+          {
+                  "day": "29",
+                  "month": "sep",
+                  "year": "2026",
+                  "type": "Congreso",
+                  "title": "BIOSPAIN 2026",
+                  "place": "Bilbao Exhibition Centre, Bilbao (España)",
+                  "org": "AseBio",
+                  "time": "",
+                  "url": "https://www.asebio.com/en/news-events/schedule/biospain-2026",
+                  "upcoming": true
+          },
+          {
+                  "day": "30",
+                  "month": "sep",
+                  "year": "2026",
+                  "type": "Convocatoria",
+                  "title": "Call for papers: Integration of Nutrition and Physiology in Aquatic Animals",
+                  "place": "Online (revista Fishes, MDPI)",
+                  "org": "MDPI",
+                  "time": "",
+                  "url": "https://www.mdpi.com/journal/fishes/special_issues/Nutrition_Physiology_Aquatic_Animals",
+                  "upcoming": true
+          },
+          {
+                  "day": "06",
+                  "month": "oct",
+                  "year": "2026",
+                  "type": "Webinar",
+                  "title": "Sediment plume modeling",
+                  "place": "Online",
+                  "org": "COBRA (Crustal Ocean Biosphere Research Accelerator)",
+                  "time": "",
+                  "url": "https://cobra.bigelow.org/webinars/",
+                  "upcoming": true
+          },
+          {
+                  "day": "12",
+                  "month": "oct",
+                  "year": "2026",
+                  "type": "Taller",
+                  "title": "Environmental Metagenomics",
+                  "place": "Online",
+                  "org": "Physalia Courses",
+                  "time": "",
+                  "url": "https://www.physalia-courses.org/courses-workshops/environmental-metagenomics/",
+                  "upcoming": true
+          },
+          {
+                  "day": "19",
+                  "month": "oct",
+                  "year": "2026",
+                  "type": "Taller",
+                  "title": "eDNA Metabarcoding with Nanopore",
+                  "place": "Online",
+                  "org": "Physalia Courses",
+                  "time": "",
+                  "url": "https://www.physalia-courses.org/courses-workshops/nanopore-dnametabarcoding/",
+                  "upcoming": true
+          },
+          {
+                  "day": "03",
+                  "month": "nov",
+                  "year": "2026",
+                  "type": "Taller",
+                  "title": "Marine Spatial Data in R",
+                  "place": "Online",
+                  "org": "Physalia Courses",
+                  "time": "",
+                  "url": "https://www.physalia-courses.org/courses-workshops/marine-spatial-data-in-r/",
+                  "upcoming": true
+          },
+          {
+                  "day": "17",
+                  "month": "nov",
+                  "year": "2026",
+                  "type": "Congreso",
+                  "title": "World Conference on Marine Biodiversity 2026 (WCMB 2026)",
+                  "place": "Brujas (Bélgica)",
+                  "org": "EurOcean / VLIZ",
+                  "time": "",
+                  "url": "https://www.wcmb2026.org/call-abstracts",
+                  "upcoming": true
+          },
+          {
+                  "day": "31",
+                  "month": "dic",
+                  "year": "2026",
+                  "type": "Convocatoria",
+                  "title": "Call for papers: Feature Papers in Aquaculture 2026",
+                  "place": "Online (Aquaculture Journal, MDPI)",
+                  "org": "MDPI",
+                  "time": "",
+                  "url": "https://www2.mdpi.com/journal/jmse/special_issues/marine_aquaculture",
+                  "upcoming": true
+          }
+    ]
 }
