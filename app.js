@@ -63,7 +63,7 @@
   /* ---------------------------------------------------------------- */
 
   const state = {
-    page: 'inicio', slug: null, cats: [], types: [], query: '', pageNum: 1,
+    page: 'inicio', slug: null, cats: [], types: [], query: '', pageNum: 1, agendaType: null,
     searchOpen: false, menuOpen: false, draft: '', email: '', subscribed: false,
     comments: {},
     commentName: '', commentEmail: '', replyingTo: null,
@@ -628,8 +628,8 @@
   }
 
   function renderAgenda() {
-    const upcoming = EVENTS.filter(e => e.upcoming);
-    const past = EVENTS.filter(e => !e.upcoming);
+    const AGENDA_TYPES = {Congreso:{accent:'#0B3D57',bgLight:'#E7EEF3',dark:'#0B3D57',label:'Congresos'},Taller:{accent:'#17A398',bgLight:'#E1F5EE',dark:'#0B5B52',label:'Talleres y cursos'},Webinar:{accent:'#F2665E',bgLight:'#FCEBE9',dark:'#7A2E28',label:'Webinars'},Convocatoria:{accent:'#7B5EA7',bgLight:'#EDE7F5',dark:'#4A3766',label:'Convocatorias'}}; const activeType = state.agendaType; const upcoming = EVENTS.filter(e => e.upcoming);
+    const past = EVENTS.filter(e => !e.upcoming); const upcomingShown = activeType ? upcoming.filter(e => e.type === activeType) : upcoming; const pastShown = activeType ? past.filter(e => e.type === activeType) : past; const tiles = Object.keys(AGENDA_TYPES).map(function(type) { var t = AGENDA_TYPES[type]; var count = EVENTS.filter(function(ev){return ev.type === type;}).length; var on = activeType === type; return '<div data-action="agenda-filter" data-type="' + type + '" role="button" tabindex="0" class="bbb-agenda-tile' + (on ? ' is-active' : '') + '" style="background:' + (on ? t.accent : t.bgLight) + ';color:' + (on ? '#fff' : t.dark) + '"><div style="font-weight:500;font-size:16px">' + t.label + '</div><div style="font-size:12.5px;opacity:.8;margin-top:4px">' + count + ' evento' + (count === 1 ? '' : 's') + '</div></div>'; }).join('');
 
     const row = (e, isUpcoming) => `
     <div class="bbb-row bbb-row-center" style="display:flex;gap:24px;border:1px solid ${isUpcoming ? '#e2ddd2' : '#ece8df'};border-radius:14px;padding:20px 24px${isUpcoming ? '' : ';background:#faf8f3'}">
@@ -648,14 +648,14 @@
 <main class="bbb-pad" style="max-width:1180px;margin:0 auto;padding-top:52px;padding-bottom:80px">
   <h1 style="margin:0 0 6px;font-size:44px;font-weight:500;letter-spacing:-.03em;color:#0B3D57">Agenda</h1>
   <p style="margin:0 0 40px;font-size:16.5px;color:#12293A;opacity:.7;max-width:60ch">Congresos, talleres, webinars y convocatorias de biología marina, microbiología marina y biotecnología azul, con foco en España y Europa.</p>
-
+<div class="bbb-agenda-tiles" style="margin:8px 0 36px">${tiles}</div>${activeType ? '<div style="margin:-20px 0 32px"><span data-action="agenda-clear" role="button" tabindex="0" style="cursor:pointer;font-size:13.5px;color:#F2665E;text-decoration:underline">← Ver todos los eventos</span></div>' : ''}
   <h2 style="margin:0 0 18px;font-size:15px;letter-spacing:.16em;font-weight:500;color:#17A398">próximos</h2>
-  <div style="display:flex;flex-direction:column;gap:16px">${upcoming.map(e => row(e, true)).join('')}</div>
+  <div style="display:flex;flex-direction:column;gap:16px">${upcomingShown.map(e => row(e, true)).join('')}</div>
 
   <div style="height:1px;background:#d9d3c4;margin:52px 0 40px"></div>
 
   <h2 style="margin:0 0 18px;font-size:15px;letter-spacing:.16em;font-weight:500;color:#12293A;opacity:.5">pasados</h2>
-  <div style="display:flex;flex-direction:column;gap:16px">${past.map(e => row(e, false)).join('')}</div>
+  <div style="display:flex;flex-direction:column;gap:16px">${pastShown.map(e => row(e, false)).join('')}</div>
 </main>`;
   }
 
@@ -721,7 +721,7 @@
     const el = e.target.closest('[data-action]');
     if (!el) return;
     const action = el.dataset.action;
-    if (action === 'nav') { go(el.dataset.page); return; }
+    if (action === 'agenda-filter') { state.agendaType = (state.agendaType === el.dataset.type ? null : el.dataset.type); render(); return; } if (action === 'agenda-clear') { state.agendaType = null; render(); return; } if (action === 'nav') { go(el.dataset.page); return; }
     if (action === 'open-article') { go('articulo', {slug: el.dataset.slug}); return; }
     if (action === 'toggle-search') { state.searchOpen = !state.searchOpen; render(); return; }
     if (action === 'toggle-menu') { state.menuOpen = !state.menuOpen; render(); return; }
