@@ -80,6 +80,9 @@
   .bbb-list{grid-template-columns:1fr 1fr}
   .bbb-pad{padding-left:40px;padding-right:40px}
   .bbb-h1{font-size:72px}
+        .bbb-agenda-tiles{display:grid;grid-template-columns:repeat(4,1fr)}
+        .bbb-agenda-tile{cursor:pointer;padding:22px 18px;border-radius:14px;text-align:center;transition:transform .16s ease,box-shadow .16s ease}
+        .bbb-agenda-tile:hover,.bbb-agenda-tile:focus-visible{transform:translateY(-4px);box-shadow:0 12px 26px rgba(11,61,87,.18)}
   @media(max-width:900px){
     .bbb-nav{display:none}
     .bbb-burger{display:grid}
@@ -90,6 +93,7 @@
     .bbb-3col{grid-template-columns:1fr}
     .bbb-row{flex-direction:column;align-items:stretch}
     .bbb-list{grid-template-columns:1fr}
+          .bbb-agenda-tiles{grid-template-columns:repeat(2,1fr)}
     .bbb-pad{padding-left:22px;padding-right:22px}
     .bbb-h1{font-size:44px}
     .bbb-search-input{display:none}
