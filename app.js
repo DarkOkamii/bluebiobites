@@ -647,7 +647,7 @@
     return `
 <main class="bbb-pad" style="max-width:1180px;margin:0 auto;padding-top:52px;padding-bottom:80px">
   <h1 style="margin:0 0 6px;font-size:44px;font-weight:500;letter-spacing:-.03em;color:#0B3D57">Agenda</h1>
-  <p style="margin:0 0 40px;font-size:16.5px;color:#12293A;opacity:.7;max-width:60ch">Charlas, congresos y talleres sobre ciencia marina en Alicante, Elche, Murcia y alrededores. Eventos de ejemplo mientras se completa la agenda real.</p>
+  <p style="margin:0 0 40px;font-size:16.5px;color:#12293A;opacity:.7;max-width:60ch">Congresos, talleres, webinars y convocatorias de biología marina, microbiología marina y biotecnología azul, con foco en España y Europa.</p>
 
   <h2 style="margin:0 0 18px;font-size:15px;letter-spacing:.16em;font-weight:500;color:#17A398">próximos</h2>
   <div style="display:flex;flex-direction:column;gap:16px">${upcoming.map(e => row(e, true)).join('')}</div>
