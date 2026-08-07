@@ -488,7 +488,7 @@
   </div>
   <div style="max-width:66ch;margin:48px auto 0;display:flex;flex-direction:column;gap:22px">
     ${BIO.map(t => `<p style="margin:0;font-size:17.5px;line-height:1.75;color:#12293A;opacity:.88;text-align:justify;text-wrap:pretty">${esc(t)}</p>`).join('')}
-    <a href="mailto:bluebiobites@gmail.com" style="align-self:flex-start;margin-top:14px;background:#F2665E;color:#fff;padding:14px 30px;border-radius:6px;font-size:15px;text-decoration:none">Escríbeme</a>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-self:flex-start;margin-top:14px"><a href="mailto:bluebiobites@gmail.com" style="background:#F2665E;color:#fff;padding:14px 30px;border-radius:6px;font-size:15px;text-decoration:none">Escríbeme</a><a href="${ROOT_PREFIX}/assets/CV_Alejandro_Galan_Galian.pdf" download style="border:1.5px solid #17A398;color:#17A398;padding:12.5px 28px;border-radius:6px;font-size:15px;text-decoration:none;background:#fff">Descargar CV</a><a href="https://www.linkedin.com/in/alejandrogalangalian" target="_blank" rel="noopener" style="border:1.5px solid #0B3D57;color:#0B3D57;padding:12.5px 28px;border-radius:6px;font-size:15px;text-decoration:none;background:#fff">LinkedIn</a></div>
   </div>
 </main>`;
   }
